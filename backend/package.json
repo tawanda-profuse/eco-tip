@@ -1,0 +1,26 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "A web application for health and savings",
+  "main": "index.js",
+  "scripts": {
+    "run": "node index",
+    "dev-run": "nodemon index"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "lodash": "^4.17.21",
+    "method-override": "^3.0.0",
+    "mongoose": "^6.3.4",
+    "morgan": "^1.10.0",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.7"
+  },
+  "author": "Tawanda Andrew Msengezi",
+  "license": "ISC"
+}
