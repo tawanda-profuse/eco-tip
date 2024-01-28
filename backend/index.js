@@ -17,7 +17,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log("Mongoose Connected"))
-  .catch((err) => console.log(error));
+  .catch((error) => console.log(error));
 
 // Middleware and static files
 app.use(express.json());
