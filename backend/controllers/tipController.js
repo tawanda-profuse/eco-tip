@@ -1,4 +1,4 @@
-const Tip = require("../models/Tip");
+const Tip = require("../models/tip");
 
 const tips_index = (req, res) => {
   Tip.find()
