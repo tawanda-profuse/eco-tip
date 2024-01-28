@@ -2,6 +2,29 @@ import { useEffect, useState } from "react";
 import useFetchTips from "./../useFetchTips";
 import ".././index.css";
 
+// Check if notifications exist in user browser:
+const notifyUser = async (notificationText, body) => {
+  if (!("Notification" in window)) {
+    alert("Browser does not support notifications");
+  } else if (Notification.permission === "granted") {
+    new Notification(notificationText, {
+      icon: "images/logo.png",
+      body,
+    });
+  } else if (Notification.permission !== "denied") {
+    await Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        new Notification(notificationText, {
+          icon: "images/logo.png",
+          body,
+        });
+      }
+    });
+  } else {
+    new Notification(null);
+  }
+};
+
 const Home = () => {
   const url = "http://localhost:3000";
   const [data, isPending, error] = useFetchTips(url);
@@ -13,25 +36,34 @@ const Home = () => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % data.length);
       // Alert/push notifications
-      showNotification(true);
-    }, 3000); // 30 seconds
+      notifyUser("You have a new EcoTip", data[currentIndex].method);
+    }, 30000); // 30 seconds
 
     return () => {
       clearInterval(interval);
     };
   }, [currentIndex, data]);
 
+  const enableNotifs = async () => {
+    await notifyUser("Notifications have been enabled").then(() => {
+      showNotification(true);
+    });
+  };
+
   return (
     <>
-      <div
-        className="push-popup"
-        style={{
-          translate: notification ? "0% 0" : "120% 0",
-        }}
-      >
-        <img src="images/logo.png" alt="logo" />
-        <p>You have a new Eco tip!</p>
-      </div>
+      {!notification && !(Notification.permission === "granted") ? (
+        <div className="push-popup">
+          <div className="buttons">
+            <button onClick={enableNotifs}>
+              <i className="fas fa-times"></i>
+            </button>
+          </div>
+          <p>Disable notifications?</p>
+        </div>
+      ) : (
+        <div></div>
+      )}
       <span
         className="info"
         onMouseOver={() => {

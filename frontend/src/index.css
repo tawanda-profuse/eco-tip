@@ -55,7 +55,8 @@ body {
 .info:hover {
     background-color: black;
     border-color: black;
-    scale: 1.1;
+    /* scale: 1.1; */
+    color: yellowgreen;
 }
 
 .about-info {
@@ -81,21 +82,24 @@ body {
 
 .push-popup {
     position: absolute;
-    top: 2%;
-    right: 2%;
+    top: 1%;
+    right: 1%;
     box-shadow: 0.1rem 0.2rem 0.2rem 0.2rem #444;
     width: 13rem;
-    background-color: goldenrod;
+    background-color: yellowgreen;
     border-radius: 0.8rem;
-    padding: 1.5rem;
+    padding: 0 1.5rem 1.5rem;
     font-size: 1.1rem;
     z-index: 3;
     color: #000;
     font-weight: bold;
     transition: 0.5s ease-in-out translate;
-    translate: 120% 0;
 }
 
+.push-popup i {
+    color: black;
+    font-size: 1.2rem;
+}
 .push-popup img {
     width: 3rem;
     border-radius: 50%;
@@ -108,6 +112,25 @@ body {
     vertical-align: middle;
     text-align: center;
 }
+
+.push-popup .buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0.4rem 0;
+}
+.push-popup .buttons button{
+    outline: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.push-popup .buttons button:hover{
+    background-color: goldenrod;
+}
+.push-popup .buttons button i{
+    font-size: 2rem;
+}
+
 
 @media screen and (max-width: 947px) {
     .about-info {
