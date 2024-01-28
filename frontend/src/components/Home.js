@@ -26,7 +26,7 @@ const notifyUser = async (notificationText, body) => {
 };
 
 const Home = () => {
-  const url = window.location.origin.includes('localhost') ? "http://localhost:3000" : "https://ecotip.onrender.com";
+  const url = window.location.origin.includes('localhost') ? "http://localhost:3000" : "https://ecotip-backend.onrender.com";
   const [data, isPending, error] = useFetchTips(url);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [display, showDisplay] = useState(false);
