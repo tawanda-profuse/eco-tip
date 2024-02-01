@@ -26,17 +26,21 @@ const notifyUser = async (notificationText, body) => {
 };
 
 const Home = () => {
-  const url = window.location.origin.includes('localhost') ? "http://localhost:3000" : "https://ecotip-backend.onrender.com";
+  const url = window.location.origin.includes("localhost")
+    ? "http://localhost:3000"
+    : "https://ecotip-backend.onrender.com";
   const [data, isPending, error] = useFetchTips(url);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [display, showDisplay] = useState(false);
   const [notification, showNotification] = useState(false);
 
   useEffect(() => {
+    const soundEffect = new Audio("sounds/bell.mp3");
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % data.length);
       // Alert/push notifications
       notifyUser("You have a new EcoTip", data[currentIndex].method);
+      soundEffect.play();
     }, 30000); // 30 seconds
 
     return () => {
@@ -52,19 +56,21 @@ const Home = () => {
 
   return (
     <>
+      {/* Popup notification: */}
       {!notification && !(Notification.permission === "granted") ? (
         <div className="push-popup">
-          <div className="buttons">
+          <span className="buttons">
             <button onClick={enableNotifs}>
               <i className="fas fa-times"></i>
             </button>
-          </div>
+          </span>
           <p>Disable notifications?</p>
         </div>
       ) : (
         <div></div>
       )}
-      <span
+      {/* Menu info button */}
+      <button
         className="info"
         onMouseOver={() => {
           showDisplay(true);
@@ -74,8 +80,9 @@ const Home = () => {
         }}
       >
         <i className="fas fa-info"></i>
-      </span>
-      <div
+      </button>
+      {/* Dynamic menu */}
+      <nav
         className="about-info"
         style={{ display: display ? "block" : "none" }}
       >
@@ -85,15 +92,22 @@ const Home = () => {
           better ways to live life. The messages are insightful and serve as a
           guideline to a healthier, cheaper, and more fulfilling lifestyle.
         </p>
-      </div>
-      <div className="container">
-        <h1>
-          <i className="fas fa-question"></i>
-        </h1>
+      </nav>
+      <main className="container">
+        <i className="fas fa-question"></i>
+        {/* Conditional rendering */}
         {error && <div>error</div>}
-        {isPending && <img className="loading" src="images/logo.png" alt="" />}
-        {data.length && <p>{data[currentIndex].method}.</p>}
-      </div>
+        {isPending && (
+          <div className="loading">
+            <i className="fas fa-spinner"></i>
+          </div>
+        )}
+        {data.length === 0 ? (
+          <p></p>
+        ) : (
+          data.length && <p>{data[currentIndex].method}.</p>
+        )}
+      </main>
     </>
   );
 };
