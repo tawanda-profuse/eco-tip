@@ -30,18 +30,23 @@ const Home = () => {
     ? "http://localhost:3000"
     : "https://ecotip-backend.onrender.com";
   const [data, isPending, error] = useFetchTips(url);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(
+    Math.floor(Math.random() * data.length)
+  );
   const [display, showDisplay] = useState(false);
   const [notification, showNotification] = useState(false);
 
   useEffect(() => {
     const soundEffect = new Audio("sounds/bell.mp3");
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % data.length);
+      setCurrentIndex(Math.floor(Math.random() * data.length));
       // Alert/push notifications
       notifyUser("You have a new EcoTip", data[currentIndex].method);
-      soundEffect.play();
-    }, 30000); // 30 seconds
+      soundEffect
+        .play()
+        .then()
+        .catch((error) => console.error(error));
+    }, 3000); // 30 seconds
 
     return () => {
       clearInterval(interval);
