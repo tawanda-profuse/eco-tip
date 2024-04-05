@@ -27,9 +27,10 @@ const notifyUser = async (notificationText, body) => {
 
 const Home = () => {
   const url = window.location.origin.includes("localhost")
-    ? "http://localhost:3000"
+    ? "http://localhost:5000"
     : "https://ecotip-backend.onrender.com";
   const [data, isPending, error] = useFetchTips(url);
+
   const [currentIndex, setCurrentIndex] = useState(
     Math.floor(Math.random() * data.length)
   );
@@ -46,7 +47,7 @@ const Home = () => {
         .play()
         .then()
         .catch((error) => console.error(error));
-    }, 3000); // 30 seconds
+    }, 30000); // 30 seconds
 
     return () => {
       clearInterval(interval);
@@ -101,17 +102,13 @@ const Home = () => {
       <main className="container">
         <i className="fas fa-question"></i>
         {/* Conditional rendering */}
-        {error && <div>error</div>}
+        {error && <div>{error}</div>}
         {isPending && (
           <div className="loading">
             <i className="fas fa-spinner"></i>
           </div>
         )}
-        {data.length === 0 ? (
-          <p></p>
-        ) : (
-          data.length && <p>{data[currentIndex].method}.</p>
-        )}
+        {data.length && <p>{data[currentIndex].method}.</p>}
       </main>
     </>
   );
