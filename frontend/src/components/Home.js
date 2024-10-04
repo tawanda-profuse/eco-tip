@@ -2,78 +2,95 @@ import { useEffect, useState } from "react";
 import useFetchTips from "./../useFetchTips";
 import ".././index.css";
 
-// Check if notifications exist in user browser:
-const notifyUser = async (notificationText, body) => {
-  if (!("Notification" in window)) {
-    alert("Browser does not support notifications");
-  } else if (Notification.permission === "granted") {
-    new Notification(notificationText, {
-      icon: "images/logo.png",
-      body,
-    });
-  } else if (Notification.permission !== "denied") {
-    await Notification.requestPermission().then((permission) => {
-      if (permission === "granted") {
-        new Notification(notificationText, {
-          icon: "images/logo.png",
-          body,
-        });
-      }
-    });
-  } else {
-    new Notification(null);
-  }
-};
-
 const Home = () => {
   const url = window.location.origin.includes("localhost")
     ? "http://localhost:5000"
     : "https://ecotip-backend.onrender.com";
   const [data, isPending, error] = useFetchTips(url);
-
-  const [currentIndex, setCurrentIndex] = useState(
-    Math.floor(Math.random() * data.length)
-  );
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [display, showDisplay] = useState(false);
-  const [notification, showNotification] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [isMuted, setIsMuted] = useState(
+    localStorage.getItem("soundPreference") === "muted" ? true : false
+  );
+
+  const notifyUser = async (notificationText, body) => {
+    if (!("Notification" in window)) {
+      alert("Browser does not support notifications");
+    } else if (Notification.permission === "granted") {
+      new Notification(notificationText, {
+        icon: "images/logo.png",
+        body,
+      });
+    } else if (Notification.permission !== "denied") {
+      await Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          new Notification(notificationText, {
+            icon: "images/logo.png",
+            body,
+          });
+        } 
+      });
+    }
+  };
+
+  const enableNotifications = async () => {
+    await notifyUser("Notifications have been enabled");
+  };
+
+  const toggleSoundPreference = () => {
+    const newSoundState = !isMuted;
+    setIsMuted(newSoundState);
+    localStorage.setItem("soundPreference", newSoundState ? "muted" : "unmuted");
+    alert(`Sound is now ${newSoundState ? "muted" : "unmuted"}`);
+  };
+
+  const resetPreferences = () => {
+    localStorage.removeItem("soundPreference");
+    setIsMuted(false);
+    alert(
+      "To reset notification permissions, please go to your browser's site settings:\n\n" +
+      "For Chrome: Click the lock icon next to the URL -> Site Settings -> Reset Permissions.\n\n" +
+      "For Firefox: Click the lock icon -> Clear Cookies and Site Data.\n\n" +
+      "For Safari: Go to Preferences -> Websites -> Notifications -> Remove the site."
+    );
+    setOpenDialog(false);
+  };
 
   useEffect(() => {
-    const soundEffect = new Audio("sounds/bell.mp3");
     const interval = setInterval(() => {
       setCurrentIndex(Math.floor(Math.random() * data.length));
-      // Alert/push notifications
-      notifyUser("You have a new EcoTip", data[currentIndex].method);
-      soundEffect
-        .play()
-        .then()
-        .catch((error) => console.error(error));
+        notifyUser("You have a new EcoTip", data[currentIndex].method);
+      if (!isMuted) {
+        const soundEffect = new Audio("sounds/bell.mp3");
+        soundEffect.play().catch((error) => console.error(error));
+      }
     }, 30000); // 30 seconds
 
     return () => {
       clearInterval(interval);
     };
-  }, [currentIndex, data]);
+  }, [currentIndex, data, isMuted]);
 
-  const enableNotifs = async () => {
-    await notifyUser("Notifications have been enabled").then(() => {
-      showNotification(true);
-    });
+  const handleNext = () => {
+    setCurrentIndex((prev) => prev + 1);
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => prev - 1);
   };
 
   return (
     <>
       {/* Popup notification: */}
-      {!notification && !(Notification.permission === "granted") ? (
-        <div className="push-popup">
-          <span className="buttons">
-            <button onClick={enableNotifs}>
-              <i className="fas fa-times"></i>
-            </button>
-          </span>
-          <p>Disable notifications?</p>
-        </div>
-      ) : (
-        <div></div>
+      {!isPending && (
+        <button
+          className="push-popup"
+          onClick={() => setOpenDialog(!openDialog)}
+          title="Toggle settings"
+        >
+          <i className="fas fa-gear"></i>
+        </button>
       )}
       {/* Menu info button */}
       <button
@@ -108,8 +125,39 @@ const Home = () => {
             <i className="fas fa-spinner"></i>
           </div>
         )}
-        {data.length && <p>{data[currentIndex].method}.</p>}
+        {!isPending && (
+          <>
+            <p>{data[currentIndex].method}.</p>
+            <div className="nav-buttons">
+              <button
+                onClick={handlePrev}
+                disabled={currentIndex === 0 ? true : false}
+              >
+                <i className="fas fa-chevron-left"></i>
+              </button>
+              <button onClick={handleNext}>
+                <i className="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </>
+        )}
       </main>
+      <dialog open={openDialog}>
+        <button className="close-dialog" onClick={() => setOpenDialog(false)}>
+          <i className="fas fa-times"></i>
+        </button>
+        <div className="action-buttons">
+          <button onClick={enableNotifications}>
+            Notification Preferences
+          </button>
+          <button onClick={toggleSoundPreference}>
+            Sound Preference: (<i className={isMuted ? "fas fa-volume-high" : "fas fa-volume-xmark"}></i>)
+          </button>
+          <button onClick={resetPreferences}>
+            Reset Preferences
+          </button>
+        </div>
+      </dialog>
     </>
   );
 };

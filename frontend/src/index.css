@@ -10,39 +10,50 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #444;
     overflow: hidden;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     height: 100vh;
+    width: 100vw;
 }
 
 .container {
     text-align: center;
-    padding: 0.1rem 0.5rem 0.5rem;
+    padding: 1rem;
     border-radius: 2rem;
-    width: 100%;
+    width: 70vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    box-shadow: #444 0.5rem 1rem 1rem 0;
+
+    p {
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-wrap: balance;
+    }
 }
 
 .fa-question {
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 1.2rem;
     font-size: 3rem;
-    border: 0.5rem solid goldenrod;
+    border: 0.2rem solid goldenrod;
+    outline: none;
     border-radius: 50%;
-    margin: 2rem;
+    margin: 1rem;
     cursor: pointer;
     color: goldenrod;
     transition: 0.1s ease-in-out scale;
     background-color: transparent;
 }
 
-.container p {
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
 .loading {
     color: goldenrod;
     font-size: 4rem;
-    animation: spin 2s linear 0s infinite;
+    animation: spin 1s linear 0s infinite;
 }
 
 @keyframes spin {
@@ -59,9 +70,9 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    padding: 0.5rem 2rem;
-    font-size: 3rem;
-    border: 0.5rem solid goldenrod;
+    padding: 0.5rem 1.2rem;
+    font-size: 1.5rem;
+    border: 0.2rem solid goldenrod;
     outline: none;
     border-radius: 50%;
     margin: 1rem;
@@ -69,12 +80,12 @@ body {
     color: goldenrod;
     transition: 0.1s ease-in-out scale;
     background-color: transparent;
-}
 
-.info:hover {
-    background-color: black;
-    border-color: black;
-    color: yellowgreen;
+    &:hover {
+        background-color: black;
+        border-color: black;
+        color: yellowgreen;
+    }
 }
 
 .about-info {
@@ -90,71 +101,130 @@ body {
     border-radius: 2rem;
     text-align: center;
     padding: 2rem;
+    z-index: 100;
+
+    img {
+        width: 8rem;
+        border-radius: 50%;
+        border: 0.3rem solid gold;
+    }
 }
 
-.about-info img {
-    width: 8rem;
-    border-radius: 50%;
-    border: 0.3rem solid gold;
-}
 
 .push-popup {
     position: absolute;
-    top: 1%;
-    right: 1%;
-    box-shadow: 0.1rem 0.2rem 0.2rem 0.2rem #444;
-    background-color: goldenrod;
-    border-radius: 0.8rem;
-    padding: 0 1.5rem 1.5rem;
-    font-size: 1.1rem;
-    z-index: 3;
-    color: #000;
-    font-weight: bold;
-    transition: 0.5s ease-in-out translate;
-}
-
-
-
-.push-popup img {
-    width: 3rem;
-    border-radius: 50%;
-    top: 5%;
-    left: 50%;
-    translate: -50% 0;
-    position: absolute;
-}
-
-.push-popup p {
-    vertical-align: middle;
-    text-align: center;
-}
-
-.push-popup .buttons {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin: 0.4rem 0;
-}
-
-.push-popup .buttons button {
+    top: 0;
+    right: 0;
+    padding: 0.5rem 0.8rem;
+    font-size: 1.5rem;
+    border: 0.2rem solid goldenrod;
     outline: none;
     border-radius: 50%;
+    margin: 1rem;
     cursor: pointer;
-    padding: 0.2rem 0.6rem;
+    color: goldenrod;
+    transition: 0.1s ease-in-out scale;
+    background-color: transparent;
+
+    &:hover {
+        background-color: black;
+        border-color: black;
+        color: yellowgreen;
+    }
 }
 
-.push-popup .buttons button:hover {
-    background-color: yellowgreen;
+.nav-buttons {
+    display: flex;
+    width: 80vw;
+    justify-content: space-between;
+    padding: 1rem;
+    position: absolute;
+
+    button {
+        background-color: transparent;
+        outline: none;
+        border: none;
+        font-size: 4rem;
+        color: greenyellow;
+
+        &:hover {
+            color: goldenrod;
+            cursor: pointer;
+        }
+    }
 }
 
-.push-popup .buttons button i {
-    font-size: 2rem;
-    color: black;
-}
+dialog{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    border-radius: 1rem;
+    width: 50vw;
+    height: 60vh;
+    overflow-y: scroll;
 
+    .close-dialog{
+        position: absolute;
+        top: 5%;
+        left: 5%;
+        border-radius: 50%;
+        padding: 0.5rem 1rem;
+        font-size: 2rem;
+        background-color: red;
+        color: white;
+        border: none;
+
+        &:hover{
+            opacity: 0.8;
+            cursor: pointer;
+        }
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin: 8rem auto 4rem;
+        width: 80%;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        button{
+            padding: 1rem;
+            flex: 1;
+            border: none;
+            cursor: pointer;
+            &:hover{
+                text-decoration: underline;
+            }
+            
+            &:first-child{
+                background-color: yellow;
+            }
+            &:nth-child(2){
+                background-color: palegreen;
+            }
+            &:last-child{
+                color: white;
+                background-color: crimson;
+            }
+        }
+    }
+}
 
 @media screen and (max-width: 947px) {
     .about-info {
         width: 80vw;
+    }
+
+    .nav-buttons {
+        display: flex;
+        width: 100vw;
+    }
+
+    dialog{
+        width: 90vw;
+        height: 80vh;
     }
 }
