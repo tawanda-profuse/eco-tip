@@ -38,8 +38,14 @@ app.get("/", (req, res) => {
   res.redirect("/");
 });
 
-var port = process.env.port || 5000;
+// Conditionally listen on a port only if NODE_ENV=development
+if (process.env.NODE_ENV !== "production") {
+  var port = process.env.port || 5000;
 
-app.listen(port, function () {
-  console.log(`Express server listening on port ${port}`);
-});
+  app.listen(port, function () {
+    console.log(`Express server listening on port ${port}`);
+  });
+}
+
+// Export the app for serverless function in production (Vercel)
+module.exports = app;

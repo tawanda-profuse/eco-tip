@@ -11,5 +11,7 @@ const tipSchema = new Schema(
   { timestamps: true }
 );
 
+tipSchema.index({ method: 1 });
+
 const Tip = mongoose.model("Tip", tipSchema);
 module.exports = Tip;
