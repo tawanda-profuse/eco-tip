@@ -5,7 +5,7 @@ import ".././index.css";
 const Home = () => {
   const url = window.location.origin.includes("localhost")
     ? "http://localhost:5000"
-    : "https://ecotip-backend.onrender.com";
+    : "https://eco-tip.vercel.app";
   const [data, isPending, error] = useFetchTips(url);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [display, showDisplay] = useState(false);

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const poemController = require('../controllers/tipController');
+const tipsController = require('../controllers/tipController');
 
-router.get('/', poemController.tips_index);  
+router.get('/', tipsController.tips_index);  
 
 module.exports = router; 
